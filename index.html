@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-US">
+   <head>
+      <title> Lawrence Mullen</title>
+      <!--bootstrap -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <!-- personal CSS -->
+      <link rel="stylesheet" type="text/css" href="style/style1.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!-- Optional theme -->
+     <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
+
+      </title>
+   </head>
+
+	<body> 
+
+		<!-- A vertical navbar -->
+			<!-- A grey horizontal navbar that becomes vertical on small screens -->
+			<nav class="navbar navbar-expand-sm justify-content-center shadow-sm navbar-inverse fixed-top">
+
+			  <!-- Links -->
+			  <ul class="navbar-nav">
+			    <li class="nav-item">
+			      <a class="nav-link" href="#aboutme">About Me</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#experience">Experience</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#projects">Projects</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#film">Film</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="#contact">Contact</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" href="lawrence_mullen.pdf">Resume</a>
+			    </li>
+			   
+			 
+			  </ul>
+
+			</nav>
+
+
+		<div class="container text-center" id="intro">
+	   		<h1>Lawrence Mullen</h1>      
+	    	<p>Graduating senior at the University Of Michigan double majoring in 
+	    		Computer Science and Film & Television Media.
+	    	</p>
+	    	<div>
+	    		<img src="img/IMG_5461.jpeg" width="150px" class="thumbnail shadow-sm rounded-circle"> </img>
+	    	</div>
+	  		
+	  	</div>
+
+	  	<div class="container float-left" id="aboutme">
+	   		<h3>About Me</h3>     
+	   		<ul>
+			  <li>Proud owner of 4 chickens</li>
+			  <li>Graduated University Of Michigan in 2020 with a BS in Computer Science and BS in Film & Television Media</li>
+			  <li>Recently co-directed and edited "When We're Together" an observational documentary about the upcoming 2020 election</li>
+			  <li>I like to play violin & soccer!</li>
+			  <li> <b>Favorite song - week of 5/15: </b> <a href="https://www.youtube.com/watch?v=_YO_24AIguU">Kon Kan - I Beg Your Pardon (I Never Promised You a Rose Garden)</a></li>
+			</ul>
+	    	<div>
+	    		<img src="img/IMG_5718.jpeg" width="150px" class="thumbnail shadow rounded-circle float-left"> </img>
+	    	</div>
+	  	</div>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+
+	  	<div class="container float-left" id="experience">
+	   		<h3>Experience</h3>     
+	   		<ul>
+			  <li>May 2019 - Jan 2020: Production Assistant for Animal Planet - <i> Saved by the Barn </i></li>
+			  <li> July 2019 - Nov 2019: Assistant trainer for University Of Michigan Womens Soccer </li>
+			  <li>Feb 2019 - Sep 2019: Expo at the Black Pearl Ann Arbor</li>
+			  <li>CS Skills: Python, C++, C, Javascript, Ocaml, Git, Vue.js, React.js </li>
+			  <li>Coursework: Web Development, User Interface, Mobile App Development, Data Structures & Algorithms, Computer Security, Functional Programming. </li>
+			</ul>
+	    	
+	  	</div>
+
+	  	<div class="container float-left" id="projects">
+	   		<h3>Computer Science Projects</h3>   
+	   		<div class="projectDiv">  
+	   		<h5> Itunes Search </h5>
+	   		<hr>
+		   		<div display="inline">
+			   		<img src="img/itunes.jpg" id="itunes"> </img>
+			   		<p> A functional itunes store search that utilizes the Vue.Js web application framework to further understand Model-View-Controller pattern of design.
+			   		 </p>
+			   		 <a href="itunes_search.zip" download>
+			   		 <button class="btn"><i class="fa fa-download" ></i> Download Project (60kb)
+			   			
+			   		 </button>
+			   		 </a>
+
+		   		</div>
+	   		</div>
+	  	</div>
+
+	  	<div class="container float-left" id="film">
+	   		<h3>Film</h3>     
+	   		<ul>
+			  <li> <a href="https://vimeo.com/showcase/7046332">When We're Together: Streaming 8pm 5/16 EST </a> </li>
+			  <li> <a href="https://www.animalplanet.com/tv-shows/saved-by-the-barn/">Saved by the Barn - Animal Planet </a> </li>
+			
+			  
+			</ul>
+	  	</div>
+
+	  	<div class="container float-left" id="contact">
+	   		<h3>Contact</h3>     
+	   		<div> 
+			      <a href="mailto:lgmullen@umich.edu">lgmullen@umich.edu</a> |
+			      <a href="https://www.linkedin.com/in/lawrence-mullen-854b821a8/">LinkedIn</a> |
+			      <a href="https://github.com/lgmullen">GitHub</a> |
+			</div>
+	   			
+	   		</div>
+	    	
+	  	</div>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+
+	</body>
+</html>
