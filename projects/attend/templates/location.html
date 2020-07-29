@@ -1,0 +1,340 @@
+
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+        
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="332300631825-gapksda1frqks5u0vta23n9c3r7ubcvi.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+            <style>
+                @import url('https://fonts.googleapis.com/css?family=Overpass+Mono|Lekton');
+                /*@import url('https://fonts.googleapis.com/css?family=EB+Garamond');*/
+                 a:hover {
+                background-color: lightgreen;
+                 }
+                 
+                 h1 {
+                position: absolute;
+                left: 50%;
+                top: 2%;
+                /* width: 100%; */
+                text-align: center;
+                /* font-size: 18px; */
+            }
+                #drpdn {   
+                    width: 50%;
+                }
+
+                #plc {
+                    display:inline-block;
+                }
+
+                input[type="checkbox"] {
+                    -webkit-appearance:checkbox;
+                    /* Double-sized Checkboxes */
+                    -ms-transform: scale(1.5); /* IE */
+                    -moz-transform: scale(1.5); /* FF */
+                    -webkit-transform: scale(1.5); /* Safari and Chrome */
+                    -o-transform: scale(1.5); /* Opera */
+                    transform: scale(1.5);
+                    padding: 10px;
+                }
+
+                #el1 {display:inline-block; width:30%;} 
+                #el2 {display:inline-block; width:30%;} 
+
+
+            </style>
+
+        <h1> Attend </h1>
+
+        <title>attend</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <!--        [if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script> <![endif]-->
+        <link rel="stylesheet" href="/css/main.css" />
+        <!--        [if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+        <!--        [if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+    </head>
+    
+    
+    <link rel="shortcut icon" href="/images/fav.ico">
+    <body class="is-preload">
+        <script src="/js/main.js"></script>
+        <script src="picker.time.js"></script>
+        <title> attend </title>
+        <!-- <body> -->
+            <div class="g-signin2" style="position: absolute;top: 22.5%; right: 12.5%;padding-left:10%" data-onsuccess="onSignIn"></div> <!-- g-signin2 -->
+            <form action="/toCSV/eecs441">
+                <button type="submit">Get CSV</button>
+            </form>
+            <p id="distance"></p>
+            
+            <p id="fingerprint"></p>
+            <script src="/js/main.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+            <script>
+                
+                var x = document.getElementById("demo");
+                var y = document.getElementById("distance");
+                //var z = document.getElementById("fingerprint")
+                
+                // Hardcoded lat/long of my house for testing
+                
+                // Function to print unique fingerprint of each device
+                /* setTimeout(function () {
+                           Fingerprint2.get(function (components) {
+                                            var values = components.map(function (component) { return component.value })
+                                            var murmur = Fingerprint2.x64hash128(values.join(''), 31)
+                                            // z.innerHTML = "One-time fingerprint: " + murmur // an array of components: {key: ..., value: ...}
+                                            })
+                           }, 500)
+                           */
+                           function error(err) {
+                               console.warn(`ERROR(${err.code}): ${err.message}`);
+                           }
+            
+            // This code gets location
+            //setTimeout(getLocation(),1000);
+            
+            var profile  = ""
+
+              function onSignIn(googleUser) {
+                // Useful data for your client-side scripts:
+                profile = googleUser.getBasicProfile();
+                /*console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+                console.log('Full Name: ' + profile.getName());
+                console.log('Given Name: ' + profile.getGivenName());
+                console.log('Family Name: ' + profile.getFamilyName());
+                console.log("Image URL: " + profile.getImageUrl());
+                console.log("Email: " + profile.getEmail());*/
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log("ID Token: " + id_token);
+                // check if umich address
+                let user_id = profile.getEmail();
+                console.log(user_id);
+                if (user_id.search("@umich.edu") === -1) {
+                    signOut();
+                }
+                else {
+                    console.log('Success user is a umich student!!!')
+                }
+                getLocation()
+                
+
+                // The ID token you need to pass to your backend:
+                //var id_token = googleUser.getAuthResponse().id_token;
+                //console.log("ID Token: " + id_token);
+            }
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                console.log('User not a umich student --- signed out.');
+                alert("User not a umich student --- signed out.");
+                });
+            }
+
+
+            function getLocation() {
+                var geo_options = {
+                    enableHighAccuracy: true,
+                    maximumAge        : 0,
+                    timeout           : 7000
+                };
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition, error, geo_options);
+                } else {
+                    x.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            }
+
+            function showPosition(position) {
+                var className = window.location.pathname
+                className = className.replace('/c/','')
+                console.log("class name is ",className)
+                $.get('/getClass/' + className, function(data, status){
+                    latClass=data.lat;
+                    lngClass=data.lng;
+                    var distance = getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude,latClass, lngClass)
+                    console.log(distance, position.coords.latitude, position.coords.longitude, latClass, lngClass)
+                    if(distance > 120){
+                        alert("You are too far away from the classroom")
+                    }else{
+                        const Url = window.location.pathname
+                        className=Url.replace('/c/','')
+                        var data = {
+                        studentName : profile.getName(),
+                        uniqname: profile.getEmail().split("@")[0],
+                        className: className
+                        }
+
+                        $.post(Url, data, function(data, status){
+                            console.log(data)
+                            alert(data.message)
+                        });
+                    }
+                })
+            }
+            
+            function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+                var R = 6371; // Radius of the earth in km
+                var dLat = deg2rad(lat2-lat1);  // deg2rad below
+                var dLon = deg2rad(lon2-lon1);
+                var a =
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon/2) * Math.sin(dLon/2)
+                ;
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                var d = R * c; // Distance in km
+                return d * 3280.84;
+            }
+            
+            function deg2rad(deg) {
+                return deg * (Math.PI/180)
+            }
+              function onSignIn(googleUser) {
+                // Useful data for your client-side scripts:
+                var profile = googleUser.getBasicProfile();
+                
+                
+                if (profile.getFamilyName() == "Bosier") {
+                    createAclass();
+                }
+                
+                const Url = window.location.pathname;
+                console.log(Url);
+                var data = {
+                  studentName : profile.getName(),
+                  uniqname: profile.getEmail().split("@")[0],
+                  className: window.location.pathname
+                }
+
+                $.post(Url, data, function(data, status){
+                  console.log('${data} and status is {status}')
+                });
+
+                // The ID token you need to pass to your backend:
+                //var id_token = googleUser.getAuthResponse().id_token;
+                //console.log("ID Token: " + id_token);
+            }
+            
+            var count = 0;
+            $.get("/attendance/eecs441", function(data, status){
+                count = data.count;
+                classroomName = data.classroom
+                console.log(count)
+                createAclass(count,classroomName,data.teacherName);
+
+
+            });
+
+            
+            function createAclass(count,classroomName,teacherName) {
+
+                
+                var spaces = "&nbsp;".repeat(15);
+                var space2 = "&nbsp;".repeat(3);    
+                var mspace = spaces.repeat(2);       
+                
+                y.innerHTML = "<h3>Welcome, Professor " + teacherName + "</h3>";
+
+
+                y.innerHTML += "<h3>Course attendance:</h3>";
+
+                y.innerHTML += mspace + "(# students)" + spaces +  "(# students)" +
+                                "<table style='display:block; font-size: 0.85em;'>" +
+                                "<tr>" + 
+                                    "<th>Course" + mspace + "</th>" +
+                                    "<th>Total" + mspace + "</th>" +
+                                    "<th>Avg" + mspace + "</th>" +
+                                    "<th>Bldg" + mspace + "</th>" +
+                                "</tr>" +
+                                "<tr>" + 
+                                    "<td>EECS 441 </td>" +
+                                    "<td>" + count +" </td>" + 
+                                    "<td>" + count +"</td>" + 
+                                    "<td>" + classroomName + "</td>" +
+                                "</tr>" +
+                                "</table><br>";
+
+                
+                y.innerHTML += "<h4>Add a class below</h4>";
+    
+                y.innerHTML +=  "<h4>Course:</h4>" + 
+                                "<form id=\"signup-form\" action=\"#\" method=\"post\">" +
+                                "<select>" + 
+                                "<option value=\"eecs441\">eecs441</option>" + 
+                                "<option value=\"eecs489\">eecs489</option>" +
+                                "<option value=\"eecs482\">eecs482</option>" + 
+                                "<option value=\"eecs470\">eecs470</option>" +
+                                "</select>" +  //"<input id=\"plc\" type=\"submit\" name=\"submit\" value=\"submit\" />" +
+                                "</form><br><br><br>";
+                
+                var hour = "1-hr time slot from: ";
+
+                
+                var checks  =   "<form action='/action_page.php'>" + 
+                                "<input type=\"checkbox\" id=\"Mon\" value=\"mon\" onclick=\"timeF(id,'demo')\">" + space2 + "Monday<strong id=\"demo\"></strong><br>" +
+                                "<input type=\"checkbox\" id=\"Tue\" value=\"tue\" onclick=\"timeF(id,'demo1')\">" + space2 + "Tuesday<strong id=\"demo1\"></strong><br>" +
+                                "<input type=\"checkbox\" id=\"Wed\" value=\"wed\" onclick=\"timeF(id,'demo2')\">" + space2 + "Wednesday<strong id=\"demo2\"></strong><br>" +
+                                "<input type=\"checkbox\" id=\"Thu\" value=\"thur\" onclick=\"timeF(id,'demo3')\">" + space2 + "Thursday<strong id=\"demo3\"></strong><br>" +
+                                "<input type=\"checkbox\" id=\"Fri\" value=\"fri\" onclick=\"timeF(id,'demo4')\">" + space2 +  "Friday<strong id=\"demo4\"></strong><br>"+
+                                "</form>"
+             
+
+                y.innerHTML +=  "<strong>Please select days and starting time for 1 hour window:</strong></br>" + 
+                                checks;
+                
+                
+
+                y.innerHTML += "</br><input type=\"submit\" style='position:absolute;left:35%;width:30%;' value=\"Submit\">";
+                y.innerHTML += "</p></header>"
+            }
+
+            function timeF(id,demo) {
+                    
+                    // alert(document.getElementById("drpdn").style.display);
+                    
+
+                    if (document.getElementById(id).checked == true){
+                         //alert(document.getElementById("drpdn").style.display = block);// = block;
+                         
+                        document.getElementById(demo).innerHTML = "<form id=\"times\" action=\"#\" method=\"post\" >" + // style=\"display:none\">" +
+                                "<select id=\"drpdn\">" +
+                                "<option value=\"9\">9:00AM<br>" +
+                                "<option name=\"10a\" value=\"10\">10:00AM</option>" +
+                                "<option name=\"11a\" value=\"11\">11:00AM</option>" +
+                                "<option name=\"12a\" value=\"12\">12:00PM</option>" +
+                                "<option name=\"1p\" value=\"1\">1:00PM</option>" +
+                                "<option name=\"2p\" value=\"2\">2:00PM</option>" +
+                                "<option name=\"3p\" value=\"3\">3:00PM</option>" +
+                                "<option name=\"4p\" value=\"4\">4:00PM</option>" +
+                                "<option name=\"5p\" value=\"5\">5:00PM</option>" +
+                                "<option name=\"6p\" value=\"6\">6:00PM</option>" +
+                                "<option name=\"7p\" value=\"7\">7:00PM</option>" + 
+                                "</select>" +
+                            "</form></br>";
+                    }
+                    else{
+                        document.getElementById(demo).innerHTML = "";
+                        // alert("hello");
+                    }  
+            }
+ 
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                console.log('User signed out.');
+                });
+            }
+            
+            </script>
+
+        </body>
+</html>
+
